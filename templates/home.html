@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produtos</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.6.1/font/bootstrap-icons.min.css">
+  <style>
+    /* Estilos personalizados para o carrossel */
+    .carousel-wrapper {
+      width: 80%;
+      margin: 0 auto;
+    }
+
+    .carousel-slide {
+      height: 300px;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .navbar {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    .navbar .navbar-collapse {
+      justify-content: center;
+    }
+
+    .navbar-brand {
+      color: #fff;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .navbar-nav .nav-link {
+      color: #fff;
+      font-size: 18px;
+    }
+
+    .produto-card {
+      cursor: pointer;
+    }
+
+    .card-price {
+      color: green;
+    }
+
+    .btn-carrinho {
+      margin-left: 5px;
+    }
+
+    body {
+      background-image: url('static/background_home/background.jpg1');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-family: Arial, sans-serif;
+      color: #fff;
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .btn {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light w-100">
+    <div class="container">
+      <a class="navbar-brand" href="/">Home</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/categorias">Categorias</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/criar-conta">Criar Conta</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/fazer-login">Fazer Login</a>
+          </li>
+          <!-- Adicione aqui os demais itens do menu de navegação -->
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-5">
+    <h1>Lojas Virtuais</h1>
+    <p>Arraste para o lado para ver mais produtos</p>
+
+    <div class="carousel-wrapper">
+      {% for i in range(1, 4) %}
+        <div class="carousel-slide">
+          <img src="{{ url_for('static', filename='carrossel/image' ~ i ~ '.jpg') }}" alt="Imagem {{ i }}">
+        </div>
+      {% endfor %}
+    </div>
+
+    <h2>Produtos Disponíveis</h2>
+
+    <div class="row mt-5">
+      {% for produto in produtos %}
+        <div class="col-md-3">
+          <div class="card mb-3 produto-card" onclick="showProductDetails({{ produto.id }})" data-bs-toggle="modal"
+            data-bs-target="#carrinhoModal">
+            <img src="{{ produto.imagem }}" class="card-img-top" alt="{{ produto.nome }}" style="max-height: 250px;">
+            <div class="card-body">
+              <h5 class="card-title">{{ produto.nome }}</h5>
+              <p class="card-text">{{ produto.descricao }}</p>
+              <p class="card-text card-price">Preço: R$ {{ produto.preco }}</p>
+              <div class="d-flex justify-content-between">
+                <button class="btn addToCartButton" onclick="addToCart(event)">
+                  <i class="bi bi-cart-plus-fill"></i> Carrinho
+                </button>
+                <button class="btn" onclick="buyProduct(event)">Comprar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Modal do Carrinho de Compras -->
+  <div class="modal fade" id="carrinhoModal" tabindex="-1" aria-labelledby="carrinhoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="carrinhoModalLabel">Carrinho de Compras</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Aqui você pode adicionar o conteúdo do carrinho de compras -->
+          <p>O conteúdo do carrinho será exibido aqui.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          <button type="button" class="btn btn-primary">Finalizar Compra</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    integrity="sha384-ypaS9N2VG+uYsL70vFvxvhIquYLeucF1yvGaxWkCwUhMzbi2LL48O59veA5qDZ9U" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+    integrity="sha384-rbGxQ1VVY2wUUIJSzODp3pLz69YH44+l3WrOEqMbBbmtg9i2bnDTzp3e0sV1mZvl" crossorigin="anonymous"></script>
+  <script>
+    $(document).ready(function () {
+      $('.carousel-wrapper').slick({
+        dots: true,
+        infinite: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 2000
+      });
+    });
+
+    function showProductDetails(productId) {
+      var products = [
+        {% for produto in produtos %}
+        {
+          id: {{ produto.id }},
+          title: "{{ produto.nome }}",
+          description: "{{ produto.descricao }}"
+        },
+        {% endfor %}
+      ];
+
+      var product = products.find(function (item) {
+        return item.id === productId;
+      });
+
+      if (product) {
+        document.getElementById("product-title").textContent = product.title;
+        document.getElementById("product-description").textContent = product.description;
+        document.getElementById("product-details").style.display = "block";
+        document.getElementById("buy-button").textContent = "Comprar";
+      }
+    }
+
+    function addToCart(event) {
+      event.stopPropagation();
+      // Lógica para adicionar o produto ao carrinho
+      alert("Produto adicionado ao carrinho!");
+    }
+
+    function buyProduct(event) {
+      event.stopPropagation();
+      alert("Produto comprado com sucesso!");
+    }
+  </script>
+</body>
+
+</html>
