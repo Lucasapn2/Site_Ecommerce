@@ -1,16 +1,73 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Perfil do Usuário</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil do Usuário</title>
+    <!-- Adicione os arquivos estáticos do Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 
 <body>
-  <h1>Perfil do Usuário</h1>
-  <p>Bem-vindo(a), {{ user.nome }}!</p>
-  <p>Email: {{ user.email }}</p>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Minha Loja</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/perfil">Perfil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/fazer-logout">Sair</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Perfil do Usuário -->
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Perfil do Usuário</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center">
+                            <!-- Exibe a foto de perfil do usuário, caso tenha -->
+                            {% if user.foto_perfil %}
+                                <img src="{{ url_for('static', filename=user.foto_perfil) }}"
+                                    alt="Foto de Perfil" class="img-thumbnail mb-3" style="max-height: 200px;">
+                            {% else %}
+                                <p class="text-muted">Foto de Perfil não disponível</p>
+                            {% endif %}
+
+                            <!-- Formulário para enviar uma nova foto de perfil -->
+                            <form action="/upload-foto" method="post" enctype="multipart/form-data">
+                                <input type="file" name="foto_perfil" class="form-control-file mb-3" required>
+                                <button type="submit" class="btn btn-primary">Enviar Foto</button>
+                            </form>
+                        </div>
+                        <p><strong>Nome:</strong> {{ user.nome }}</p>
+                        <p><strong>E-mail:</strong> {{ user.email }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

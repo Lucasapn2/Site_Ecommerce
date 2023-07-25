@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <!-- Meta tags, título, e outros elementos de cabeçalho -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compra Concluída</title>
+</head>
+
+<body>
+    <!-- Conteúdo da compra concluída -->
+    <div class="container">
+        <h2>Compra Concluída</h2>
+        <p>Detalhes da Compra:</p>
+        <p>Nome do Produto: {{ nome_produto }}</p>
+        <p>Valor da Compra: R$ {{ total_compra }}</p>
+        <p>Nome do Comprador: {{ nome_usuario }}</p>
+        <p>Email do Comprador: {{ email_usuario }}</p>
+        <!-- Adicione outros detalhes da compra conforme necessário -->
+
+        <!-- Botão para redirecionar para o WhatsApp com as informações da compra preenchidas -->
+        <a href="https://api.whatsapp.com/send?phone=5521973992437&text=Olá,%20meu%20nome%20é%20{{ nome_usuario }}.%20Eu%20comprei%20o%20produto%20'{{ nome_produto }}'%20por%20R$%20{{ total_compra }}.%20Meu%20e-mail%20de%20contato%20é%20{{ email_usuario }}." class="btn btn-primary">Concluir Compra no WhatsApp</a>
+    </div>
+</body>
+
+</html>

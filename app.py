@@ -1,8 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_login import LoginManager, current_user, login_user, UserMixin, login_required, logout_user
 from flask_sqlalchemy import SQLAlchemy
 import logging
 import os
+from urllib.parse import quote
+
 
 
 app = Flask(__name__)
@@ -152,10 +154,103 @@ def alterar_imagens_carrossel():
 
     return render_template('carrossel.html', user=current_user)
 
+@app.route('/formulario-compra', methods=['GET'])
+@login_required
+def formulario_compra():
+    carrinho = session.get('carrinho', [])
+    total_compra = request.args.get('total', default=0, type=float)
+    produtos_selecionados = []
+
+    for item in carrinho:
+        produto_id = item.get('produto_id')
+        produto = Produto.query.get(produto_id)
+        if produto:
+            produtos_selecionados.append(produto)
+
+    return render_template('formulario_compra.html', produtos_selecionados=produtos_selecionados, total_compra=total_compra, user=current_user)
+
+@app.route('/enviar-compra', methods=['POST'])
+@login_required
+def enviar_compra():
+    if request.method == 'POST':
+        # Obter informações do formulário
+        nome_comprador = request.form['customerName']
+        email_comprador = request.form['customerEmail']
+        endereco_entrega = request.form['customerAddress']
+
+        # Obter o valor total da compra do campo oculto 'total_compra'
+        total_compra = float(request.form['total_compra'])
+
+        # Obter informações do carrinho da sessão
+        carrinho = session.get('carrinho', [])
+        produtos_comprados = []
+
+        for item in carrinho:
+            produto_id = item.get('produto_id')
+            produto = Produto.query.get(produto_id)
+            if produto:
+                produtos_comprados.append(produto)
+
+        # Construir a mensagem para enviar via WhatsApp
+        mensagem_whatsapp = f'Olá, {nome_comprador}!\nVocê finalizou a compra com sucesso.\n' \
+                           f'Aqui estão os detalhes da sua compra:\n\n'
+
+        for produto in produtos_comprados:
+            mensagem_whatsapp += f'Produto: {produto.nome}\nPreço: R$ {produto.preco:.2f}\n\n'
+
+        mensagem_whatsapp += f'Total da compra: R$ {total_compra:.2f}\n'
+        mensagem_whatsapp += f'Nome do comprador: {nome_comprador}\n'
+        mensagem_whatsapp += f'E-mail do comprador: {email_comprador}\n'
+        mensagem_whatsapp += f'Endereço de entrega: {endereco_entrega}\n'
+        mensagem_whatsapp += 'Obrigado pela preferência!\n'
+
+        # Substituir SEU_NUMERO_WHATSAPP pelo seu número de WhatsApp com o DDD (exemplo: 55123456789)
+        numero_whatsapp = 'SEU_NUMERO_WHATSAPP'
+        link_whatsapp = f'https://api.whatsapp.com/send?phone={5521973992437}&text={quote(mensagem_whatsapp)}'
+
+        # Redirecionar para o link do WhatsApp
+        return redirect(link_whatsapp)
+
+@app.route('/comprar', methods=['POST'])
+@login_required
+def comprar_produto():
+    if request.method == 'POST':
+        # Obtenha os detalhes do produto selecionado do formulário
+        produto_id = request.form['produto_id']
+        produto_nome = request.form['produto_nome']
+        produto_imagem = request.form['produto_imagem']
+        produto_preco = float(request.form['produto_preco'])
+
+        # Obtenha o carrinho da sessão ou crie um carrinho vazio
+        carrinho = session.get('carrinho', [])
+
+        # Adicione os detalhes do produto ao carrinho
+        carrinho.append({
+            'produto_id': produto_id,
+            'produto_nome': produto_nome,
+            'produto_imagem': produto_imagem,
+            'produto_preco': produto_preco
+        })
+
+        # Atualize o carrinho na sessão
+        session['carrinho'] = carrinho
+
+        # Calcule o valor total da compra
+        total_compra = sum(item.get('produto_preco', 0) for item in carrinho)
+
+        # Redirecione para a página do formulário de compra passando o valor total como parâmetro
+        return redirect(url_for('formulario_compra', total_compra=total_compra))
 
 
+# Adicione uma nova rota para atualizar o carrinho de compras
+@app.route('/update-cart', methods=['POST'])
+@login_required
+def update_cart():
+    if request.method == 'POST':
+        carrinho = request.json.get('carrinho', [])
+        session['carrinho'] = carrinho
 
-
+    return '', 204
 
 
 
@@ -191,6 +286,9 @@ def admin_panel():
 
     produtos = Produto.query.all()
     return render_template('admin_panel.html', produtos=produtos, user=current_user)
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
