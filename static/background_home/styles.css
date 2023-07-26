@@ -1,0 +1,187 @@
+
+    /* Estilos personalizados para o carrossel */
+    .carousel-wrapper {
+  width: 80%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.carousel-slide {
+  height: 30vh; /* Utilize porcentagem da altura da tela (viewport height) para o carrossel */
+}
+
+ .carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.navbar-nav .nav-link {
+      color: #fff; /* Ajustar a cor dos links */
+      font-size: 18px; /* Ajustar o tamanho da fonte dos links */
+    }
+
+
+   .navbar-nav .nav-link:hover {
+      color: #f8f9fa; /* Ajustar a cor dos links ao passar o mouse */
+    }
+
+    .navbar {
+    background-color: rgba(0, 0, 0, 0.8);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px 0;
+    position: fixed; /* Adicione uma posição fixa para a navbar */
+    top: 0; /* Posicione a navbar no topo da página */
+    width: 100%; /* Defina a largura para preencher a largura da página */
+    z-index: 1000; /* Adicione um z-index maior para que a navbar fique acima dos outros elementos */
+  }
+
+  .navbar .navbar-collapse {
+      justify-content: center;
+    }
+
+
+    .navbar .navbar-brand {
+      color: #fff;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+
+    /* Em telas menores, ajuste o espaçamento e o tamanho da fonte para a navbar recolhida */
+    @media (max-width: 767px) {
+      .navbar-nav .nav-link {
+        margin: 5px 0;
+        font-size: 16px;
+      }
+    }
+/* Reduza o tamanho do ícone do botão recolhido */
+.navbar-toggler-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+    /* Defina o padding e a margem para os itens da navbar */
+.navbar-nav .nav-link {
+  padding: 10px 15px;
+  margin: 0 5px;
+}
+    .produto-card {
+      cursor: pointer;
+    }
+
+.produto-card img {
+    transition: transform 0.3s; /* Adiciona uma transição suave de 0.3 segundos ao passar o mouse */
+  }
+
+  .produto-card img:hover {
+    transform: scale(1.1); /* Amplia a imagem em 10% ao passar o mouse sobre ela */
+  }
+
+
+    .card-price {
+      color: green;
+      font-size: 30px; /* Reduzindo o tamanho do preço no carrinho */
+    }
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-image: url('static/background_home/background4.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: #fff;
+  padding-top: 180px; /* Aumente o valor do padding-top para descer mais um pouco */
+}
+
+.container {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  border-radius: 100px;
+  max-width: 1350px; /* Defina uma largura máxima para o container principal */
+  margin: 0 auto;
+}
+
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .btn {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #0056b3;
+    }
+
+    .cart-content {
+      background-color: #f8f9fa;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 10px; /* Adicionando espaçamento interno aos itens do carrinho */
+      border-radius: 5px;
+      background-color: #fff; /* Definindo um fundo branco para os itens do carrinho */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adicionando uma sombra aos itens do carrinho */
+    }
+
+    .cart-item img {
+      width: 50px; /* Reduzindo o tamanho da imagem */
+      height: 100px;
+      object-fit: cover;
+      margin-right: 10px;
+    }
+
+    .cart-item-name {
+      font-weight: bold;
+      color: #000;
+      font-size: 30px; /* Ajustando o tamanho da fonte do nome do produto no carrinho */
+    }
+
+    /* Estilo para o total de produtos no carrinho */
+    .cart-total-value {
+      font-weight: bold;
+      color: #000; /* Adicione a cor desejada para o total de produtos */
+      font-size: 18px; /* Ajuste o tamanho do texto conforme necessário */
+    }
+
+/* ... Estilos anteriores ... */
+
+/* Estilo para a descrição do produto */
+.card-description {
+  max-height: 100px; /* Defina a altura máxima desejada para a descrição */
+  overflow: hidden;
+}
+
+/* ... Resto dos estilos ... */
+
+

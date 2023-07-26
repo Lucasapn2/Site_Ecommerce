@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produtos</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.6.1/font/bootstrap-icons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/background_home/styles.css">
+</head>
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-image: url('static/background_home/background4.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      color: #fff;
+      padding-top: 180px;
+    }
+  </style>
+<body>
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <img src="static/fotos_logo/logo.jpeg" alt="Logo" width="64" height="64">
+        Lojas Virtuais
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Elemento para exibir o nome do usuário logado -->
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/Perfil" id="userGreeting" style="display: none;"></a>
+        </li>
+      </ul>
+
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/#"></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/criar-conta">Criar Conta</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/fazer-login">Fazer Login</a>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Perfil
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="#">Configurações</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">Sair</a></li>
+            </ul>
+          </li>
+        </ul>
+        <button class="navbar-cart-btn" onclick="goToCart()">
+          <i class="bi bi-cart4"></i> Carrinho
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-3">
+    <h1> Prensados Deliciosos</h1>
+    <p></p>
+
+    <div class="carousel-wrapper mt-5">
+      <div class="carousel-slide">
+        <img src="{{ url_for('static', filename='carrossel/image1.jpg') }}" alt="Imagem 1">
+      </div>
+      <div class="carousel-slide">
+        <img src="{{ url_for('static', filename='carrossel/image2.jpg') }}" alt="Imagem 2">
+      </div>
+      <div class="carousel-slide">
+        <img src="{{ url_for('static', filename='carrossel/image3.jpg') }}" alt="Imagem 3">
+      </div>
+    </div>
+
+    <div class="payment-methods mt-3">
+      <h3 style="background-color: #f8f9fa; padding: 10px; border-radius: 5px; color: #000;">Promoções do Dia</h3>
+      <div
+        style="background-color: #f8f9fa; border: 10px solid #fff; padding: 5px; border-radius: 5px; display: flex; align-items: center; justify-content: center;">
+        <img decoding="async" src="https://http2.mlstatic.com/storage/homes-korriban/assets/images/payments/qr.svg"
+          alt="Via Pix" style="margin: 10px;">
+        <img decoding="async" src="URL_DA_IMAGEM_DO_CARTAO_CREDITO" alt="Cartão de Crédito" style="margin: 5px;">
+        <!-- Adicione mais imagens de ícones de formas de pagamento conforme necessário -->
+      </div>
+    </div>
+
+    <div class="row mt-3">
+      {% for produto in produtos %}
+      <div class="col-md-4">
+        <div class="card mb-3 produto-card">
+          <img src="{{ produto.imagem }}" class="card-img-top" alt="{{ produto.nome }}"
+            style="height: 250px; object-fit: cover;">
+          <div class="card-body">
+            <h5 class="card-title">{{ produto.nome }}</h5>
+            <p class="card-text card-description">{{ produto.descricao }}</p>
+            <p class="card-text card-price">Preço: R$ {{ produto.preco }}</p>
+            <div class="d-flex justify-content-between">
+              <button class="btn addToCartButton"
+                onclick="addToCart('{{ produto.id }}', '{{ produto.nome }}', '{{ produto.imagem }}', '{{ produto.preco }}')">
+                <i class="bi bi-cart-plus-fill"></i> Adicionar ao Carrinho
+              </button>
+              <button class="btn"
+                onclick="buyProduct('{{ produto.id }}', '{{ produto.nome }}', '{{ produto.imagem }}', '{{ produto.preco }}')">Comprar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="cart-content" id="cartContent">
+      <h3 style="background-color: #f8f9fa; padding: 10px; border-radius: 5px; color: #000;">Carrinho de Compras
+        <i class="bi bi-cart4"></i>
+      </h3>
+      <div id="cartItems"></div>
+      <div class="cart-total d-flex justify-content-between align-items-center">
+        <h4 class="cart-total-label" style="color: #000;">Total da Compra: <span class="cart-total-value">R$ <span
+              id="cartTotalValue">0.00</span></span></h4>
+        <div>
+          <button class="btn btn-danger mr-2" onclick="finalizePurchase()">Finalizar Compra</button>
+          <button class="btn btn-warning" onclick="clearCart()">Limpar Carrinho</button>
+        </div>
+      </div>
+      <div id="cartEmptyMessage" style="display: none;">Seu carrinho está vazio.</div>
+    </div>
+  </div>
+
+  <!-- Modal do Carrinho de Compras -->
+  <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="cartModalLabel">Carrinho de Compras</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div id="cartItemsModal">
+            <!-- Aqui serão exibidos os produtos adicionados ao carrinho -->
+          </div>
+          <div class="cart-total d-flex justify-content-between align-items-center">
+            <h4 class="cart-total-label" style="color: #000;">Total da Compra: <span class="cart-total-value">R$ <span
+                  id="cartTotalValueModal">0.00</span></span></h4>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" onclick="clearCart()">Limpar Carrinho</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Continuar Comprando</button>
+          <button type="button" class="btn btn-primary" onclick="finalizePurchase()">Finalizar Compra</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Restante das tags de script com suas bibliotecas -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    integrity="sha384-ypaS9N2VG+uYsL70vFvxvhIquYLeucF1yvGaxWkCwUhMzbi2LL48O59veA5qDZ9U"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+    integrity="sha384-rbGxQ1VVY2wUUIJSzODp3pLz69YH44+l3WrOEqMbBbmtg9i2bnDTzp3e0sV1mZvl"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.19.0/dist/js/bootstrap-icons.min.js"></script>
+  <script src="static/background_home/script.js"></script>
+</body>
+
+</html>
